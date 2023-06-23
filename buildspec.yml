@@ -1,0 +1,28 @@
+version: 0.2
+
+env:
+  secrets-manager:
+    DOCKERHUB_PASSWORD: "/dockerhub/credentials:password"
+    DOCKERHUB_USERNAME: "/dockerhub/credentials:username"
+
+phases:
+  install:
+    commands:
+      - npm install
+  pre_build:
+    commands:
+      - docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
+      - docker build -t angular-frontend .
+      - docker run --name angular-frontend --network host -d -p 4200:4200 angular-frontend
+      - docker run --name chrome-container --network host -d -p 4444:4444 --shm-size="2g" selenium/standalone-chrome
+      - sleep 10
+  build:
+    commands:
+      - npm run test
+  post_build:
+    commands:
+      - docker stop chrome-container
+      - docker stop angular-frontend
+cache:
+  paths:
+    - '/root/.m2/**/*'

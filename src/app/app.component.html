@@ -1,0 +1,18 @@
+
+
+<div class="container d-flex align-items-center container-div">
+<h4 class="display-4 text-center">List of Animals</h4>
+
+<table class="table align-items-center" id='tab'>
+    <thead>
+    <tr>
+        <th scope="col">Animals Names!</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let animal of animals;">
+        <td>{{ animal }}</td>
+    </tr>
+    </tbody>
+</table> 
+</div>
